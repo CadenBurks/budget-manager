@@ -1,3 +1,6 @@
+test.csv
+test_year.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
