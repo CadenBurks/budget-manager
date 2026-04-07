@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from datetime import date
 from decimal import Decimal
 from enum import Enum
+from data.category import Category
 
 class TransactionType(Enum):
     INCOME = "income"
@@ -14,5 +15,5 @@ class Transaction:
     merchant: str
     amount: Decimal
     transaction_type: TransactionType
-    category: str
+    category: Category
     balance: Decimal | None = field(default=None)

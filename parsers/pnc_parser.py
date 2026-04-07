@@ -1,5 +1,6 @@
 from parsers.bank_parser import BankParser
 from data.transaction import Transaction, TransactionType
+from data.category import Category, CategoryMap
 from datetime import date
 from decimal import Decimal
 import re
@@ -16,6 +17,34 @@ PNC_PREFIXES = [
     "ZEL TO ",
     "ZEL FROM ",
 ]
+PNC_CATEGORY_MAP = CategoryMap({
+    "": Category.UNCATEGORIZED,
+    "Other Expenses": Category.UNCATEGORIZED,
+    "Paychecks": Category.PAYCHECK,
+    "Deposits": Category.DEPOSIT,
+    "Home Maintenance": Category.HOME,
+    "Home Improvement": Category.HOME,
+    "Phone": Category.PHONE,
+    "Transfers": Category.UNCATEGORIZED_TRANSFER,
+    "Cash Withdrawals": Category.WITHDRAWAL,
+    "Education": Category.SERVICES,
+    "Services and Supplies": Category.SERVICES,
+    "Subscriptions and Renewals": Category.SUBSCRIPTIONS,
+    "Clothing and Shoes": Category.CLOTHING,
+    "Auto Maintenance": Category.AUTO,
+    "Entertainment": Category.ENTERTAINMENT,
+    "Restaurants and Dining": Category.DINING_AND_DELIVERY,
+    "Utilities": Category.UTILITIES,
+    "Gas and Fuel": Category.GAS,
+    "Hobbies": Category.SHOPPING,
+    "General Merchandise": Category.SHOPPING,
+    "Electronics": Category.DIGITAL,
+    "Other Income": Category.OTHER_INCOME,
+    "Rewards": Category.OTHER_INCOME,
+    "Insurance": Category.INSURANCE,
+    "Personal Expenses": Category.GYM,
+    "Groceries": Category.GROCERIES
+})
 STATES = {
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", 
     "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", 
@@ -88,8 +117,8 @@ class PNCParser(BankParser):
 
         return (Decimal(value), transaction)
 
-    def _categorize(self, category: str, rules: list) -> str:
-        return category
+    def _categorize(self, category: str, rules: list) -> Category:
+        return PNC_CATEGORY_MAP[category]
 
     def _parse_balance(self, balance: str) -> Decimal:
         return Decimal(balance[1:])
