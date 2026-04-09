@@ -117,7 +117,17 @@ class PNCParser(BankParser):
 
         return (Decimal(value), transaction)
 
-    def _categorize(self, category: str, rules: list) -> Category:
+    def _categorize(self, merchant: str, raw_desc: str, category: str, rules: list) -> Category:
+        if rules:
+            for rule in rules:
+                match = rule["match"].upper()
+                if match in merchant.upper() or match in raw_desc.upper():
+                    try:
+                        return Category[rule["category"].upper().replace(" ", "_")]
+                    except KeyError:
+                        print(f"Unknown category in rules: {rule['category']}")
+                        return Category.UNCATEGORIZED
+
         return PNC_CATEGORY_MAP[category]
 
     def _parse_balance(self, balance: str) -> Decimal:
@@ -128,7 +138,7 @@ class PNCParser(BankParser):
         raw_desc = row['Transaction Description']
         merchant = self._clean_desc(raw_desc)
         amount, transaction_type = self._parse_amount(row['Amount'])
-        category = self._categorize(row['Category'], rules)
+        category = self._categorize(merchant, raw_desc, row['Category'], rules)
         balance_raw = row.get('Balance')
         balance = self._parse_balance(balance_raw) if balance_raw else None
         

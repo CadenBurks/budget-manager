@@ -1,0 +1,15 @@
+[[rules]]
+match = "DUKE-ENERGY"
+category = "Utilities"
+
+[[rules]]
+match = "CG& S PROPERTIES"
+category = "Rent"
+
+[[rules]]
+match = "HOBBYLOBBY"
+category = "Shopping"
+
+[[rules]]
+match = "DOORDASH"
+category = "Dining and Delivery"
